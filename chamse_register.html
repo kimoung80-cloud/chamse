@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>어르신 등록 — 참새</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky: #4ab8e8;
+  --sky-dark: #1a9fd4;
+  --sky-light: #eaf6fd;
+  --sky-pale: #f5fbff;
+  --sky-border: #c2e6f7;
+  --white: #ffffff;
+  --gray-50: #f8f9fa;
+  --gray-100: #f1f3f5;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-900: #212529;
+  --green: #28a745;
+  --sans: 'Noto Sans KR', sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--gray-50);
+  color: var(--gray-900);
+  line-height: 1.6;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  height: 60px;
+  display: flex; align-items: center;
+  padding: 0 6%;
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.logo-mark {
+  width: 28px; height: 28px; background: var(--sky);
+  border-radius: 7px; display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.logo-text { font-size: 18px; font-weight: 700; color: var(--gray-900); letter-spacing: -.03em; }
+
+/* PROGRESS */
+.progress-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 20px 6%;
+}
+.progress-inner { max-width: 640px; margin: 0 auto; }
+.step-labels {
+  display: flex; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.step-label {
+  font-size: 12px; font-weight: 500;
+  color: var(--gray-500);
+  display: flex; align-items: center; gap: 5px;
+}
+.step-label.active { color: var(--sky-dark); font-weight: 700; }
+.step-label.done { color: var(--green); }
+.step-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--gray-300);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--gray-500);
+  flex-shrink: 0;
+}
+.step-label.active .step-dot { border-color: var(--sky); background: var(--sky); color: white; }
+.step-label.done .step-dot { border-color: var(--green); background: var(--green); color: white; }
+.progress-bar-wrap {
+  height: 4px; background: var(--gray-200); border-radius: 4px; overflow: hidden;
+}
+.progress-bar {
+  height: 100%; background: var(--sky); border-radius: 4px;
+  transition: width .4s ease;
+}
+
+/* MAIN */
+.main { max-width: 640px; margin: 0 auto; padding: 36px 6% 80px; }
+
+/* STEP CARD */
+.step-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 32px;
+  display: none;
+}
+.step-card.active { display: block; }
+.step-title {
+  font-size: 20px; font-weight: 700;
+  color: var(--gray-900); letter-spacing: -.03em;
+  margin-bottom: 6px;
+}
+.step-desc { font-size: 14px; color: var(--gray-600); margin-bottom: 28px; }
+
+/* FORM */
+.field { margin-bottom: 20px; }
+.field-label {
+  display: block; font-size: 14px; font-weight: 600;
+  color: var(--gray-700); margin-bottom: 7px;
+}
+.field-label span { color: var(--sky-dark); margin-left: 2px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+input[type="text"], input[type="tel"], select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  font-size: 15px; font-family: var(--sans);
+  color: var(--gray-900);
+  background: var(--white);
+  transition: border-color .15s;
+  outline: none;
+  appearance: none;
+}
+input[type="text"]:focus, input[type="tel"]:focus, select:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(74,184,232,.12);
+}
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: '▾'; position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%); color: var(--gray-500); pointer-events: none;
+  font-size: 13px;
+}
+
+/* CHIP 선택 */
+.chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 8px 14px; border-radius: 20px;
+  border: 1.5px solid var(--gray-300);
+  background: var(--white); color: var(--gray-700);
+  font-size: 13px; font-weight: 500; font-family: var(--sans);
+  cursor: pointer; transition: all .15s; user-select: none;
+}
+.chip:hover { border-color: var(--sky); color: var(--sky-dark); }
+.chip.selected { background: var(--sky); border-color: var(--sky); color: white; font-weight: 600; }
+
+/* 케어 카테고리 */
+.care-category { margin-bottom: 24px; }
+.care-cat-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--gray-600); letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.care-cat-title::before {
+  content: ''; width: 3px; height: 14px;
+  border-radius: 2px; display: inline-block;
+}
+.cat-basic .care-cat-title::before { background: #6c757d; }
+.cat-physical .care-cat-title::before { background: #20c997; }
+.cat-cognitive .care-cat-title::before { background: #845ef7; }
+.cat-life .care-cat-title::before { background: #fd7e14; }
+.cat-premium-note {
+  display: inline-block;
+  font-size: 11px; font-weight: 600; color: #fd7e14;
+  background: #fff4e6; border: 1px solid #ffd8a8;
+  border-radius: 10px; padding: 2px 8px; margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* 라디오 버튼 스타일 */
+.radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.radio-option {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  cursor: pointer; transition: all .15s;
+  font-size: 14px; color: var(--gray-700);
+  user-select: none;
+}
+.radio-option input { display: none; }
+.radio-option:hover { border-color: var(--sky); color: var(--sky-dark); }
+.radio-option.selected { border-color: var(--sky); background: var(--sky-light); color: var(--sky-dark); font-weight: 600; }
+.radio-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--gray-300); flex-shrink: 0;
+  transition: all .15s;
+}
+.radio-option.selected .radio-dot { border-color: var(--sky); background: var(--sky); }
+
+/* 차량 강조 박스 */
+.car-box {
+  background: #fff8f0;
+  border: 1.5px solid #ffd8a8;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; transition: all .15s;
+  margin-top: 4px;
+}
+.car-box:hover { border-color: #fd7e14; }
+.car-box.selected { border-color: #fd7e14; background: #fff4e6; }
+.car-icon { font-size: 22px; flex-shrink: 0; }
+.car-box-text strong { display: block; font-size: 14px; font-weight: 700; color: var(--gray-900); }
+.car-box-text span { font-size: 12px; color: var(--gray-600); }
+.car-check {
+  margin-left: auto; width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--gray-300); flex-shrink: 0; transition: all .15s;
+}
+.car-box.selected .car-check { background: #fd7e14; border-color: #fd7e14; }
+
+/* 횟수/시간 */
+.count-row { display: flex; align-items: center; gap: 12px; }
+.count-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid var(--gray-300);
+  background: white; font-size: 18px; color: var(--gray-700);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .15s; font-family: var(--sans); flex-shrink: 0;
+}
+.count-btn:hover { border-color: var(--sky); color: var(--sky-dark); }
+.count-val { font-size: 18px; font-weight: 700; color: var(--gray-900); min-width: 40px; text-align: center; }
+.count-unit { font-size: 14px; color: var(--gray-600); }
+
+/* 구분선 */
+.divider { height: 1px; background: var(--gray-200); margin: 24px 0; }
+
+/* 완료 화면 */
+.complete-wrap { text-align: center; padding: 20px 0; }
+.complete-icon {
+  width: 72px; height: 72px; background: var(--sky-light);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  border: 2px solid var(--sky-border);
+}
+.complete-icon svg { width: 32px; height: 32px; stroke: var(--sky-dark); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.complete-title { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 10px; letter-spacing: -.03em; }
+.complete-desc { font-size: 15px; color: var(--gray-600); line-height: 1.7; margin-bottom: 28px; }
+.complete-summary {
+  background: var(--sky-pale);
+  border: 1px solid var(--sky-border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  text-align: left;
+  margin-bottom: 28px;
+}
+.summary-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid var(--sky-border); gap: 16px; }
+.summary-row:last-child { border-bottom: none; }
+.summary-key { font-size: 13px; color: var(--gray-600); white-space: nowrap; }
+.summary-val { font-size: 13px; font-weight: 600; color: var(--gray-900); text-align: right; }
+
+/* BUTTONS */
+.btn-row { display: flex; gap: 10px; margin-top: 28px; }
+.btn-back {
+  padding: 13px 20px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--gray-300); background: white;
+  font-size: 15px; font-weight: 600; color: var(--gray-600);
+  cursor: pointer; font-family: var(--sans); transition: all .15s;
+  flex-shrink: 0;
+}
+.btn-back:hover { border-color: var(--gray-500); color: var(--gray-900); }
+.btn-next {
+  flex: 1; padding: 13px;
+  border-radius: var(--radius-sm);
+  border: none; background: var(--sky); color: white;
+  font-size: 16px; font-weight: 700; font-family: var(--sans);
+  cursor: pointer; transition: background .15s;
+}
+.btn-next:hover { background: var(--sky-dark); }
+.btn-full {
+  width: 100%; padding: 14px;
+  border-radius: var(--radius-sm);
+  border: none; background: var(--sky); color: white;
+  font-size: 16px; font-weight: 700; font-family: var(--sans);
+  cursor: pointer; transition: background .15s; margin-top: 8px;
+}
+.btn-full:hover { background: var(--sky-dark); }
+.btn-outline {
+  width: 100%; padding: 13px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--sky-border); background: white;
+  color: var(--sky-dark); font-size: 15px; font-weight: 600;
+  font-family: var(--sans); cursor: pointer; transition: all .15s; margin-top: 10px;
+}
+.btn-outline:hover { background: var(--sky-light); }
+
+@media (max-width: 520px) {
+  .step-card { padding: 24px 18px; }
+  .field-row { grid-template-columns: 1fr; }
+  .main { padding: 24px 4% 60px; }
+  .step-label-text { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="chamse_landing_v3.html">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/></svg>
+    </div>
+    <span class="logo-text">참새</span>
+  </a>
+</nav>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="step-labels">
+      <div class="step-label active" id="sl1">
+        <div class="step-dot">1</div>
+        <span class="step-label-text">기본 정보</span>
+      </div>
+      <div class="step-label" id="sl2">
+        <div class="step-dot">2</div>
+        <span class="step-label-text">케어 유형</span>
+      </div>
+      <div class="step-label" id="sl3">
+        <div class="step-dot">3</div>
+        <span class="step-label-text">매칭 조건</span>
+      </div>
+      <div class="step-label" id="sl4">
+        <div class="step-dot">4</div>
+        <span class="step-label-text">완료</span>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar" style="width:25%"></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- STEP 1: 기본 정보 -->
+  <div class="step-card active" id="step1">
+    <div class="step-title">보호자 & 어르신 정보</div>
+    <div class="step-desc">케어 매칭에 필요한 기본 정보를 입력해 주세요.</div>
+
+    <div style="font-size:13px;font-weight:700;color:var(--sky-dark);margin-bottom:16px;letter-spacing:.02em;">보호자 정보</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">이름 <span>*</span></label>
+        <input type="text" placeholder="홍길동" id="guardianName">
+      </div>
+      <div class="field">
+        <label class="field-label">연락처 <span>*</span></label>
+        <input type="tel" placeholder="010-0000-0000" id="guardianTel">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">어르신과의 관계 <span>*</span></label>
+      <div class="chip-group" id="relationGroup">
+        <div class="chip" onclick="selectChip(this,'relationGroup')">자녀</div>
+        <div class="chip" onclick="selectChip(this,'relationGroup')">배우자</div>
+        <div class="chip" onclick="selectChip(this,'relationGroup')">형제·자매</div>
+        <div class="chip" onclick="selectChip(this,'relationGroup')">손자·손녀</div>
+        <div class="chip" onclick="selectChip(this,'relationGroup')">기타</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-size:13px;font-weight:700;color:var(--sky-dark);margin-bottom:16px;letter-spacing:.02em;">어르신 정보</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">성별 <span>*</span></label>
+        <div class="chip-group" id="seniorGender">
+          <div class="chip" onclick="selectChip(this,'seniorGender')">남성</div>
+          <div class="chip" onclick="selectChip(this,'seniorGender')">여성</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">연령 <span>*</span></label>
+        <div class="select-wrap">
+          <select id="seniorAge">
+            <option value="">선택</option>
+            <option>60대</option><option>70대</option>
+            <option>80대</option><option>90대 이상</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">거주 지역 <span>*</span></label>
+      <div class="select-wrap">
+        <select id="seniorRegion">
+          <option value="">시·도 선택</option>
+          <option>대구</option><option>서울</option><option>부산</option>
+          <option>경기</option><option>인천</option><option>광주</option>
+          <option>대전</option><option>울산</option><option>세종</option>
+          <option>경북</option><option>경남</option><option>전북</option>
+          <option>전남</option><option>충북</option><option>충남</option>
+          <option>강원</option><option>제주</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">주거 형태</label>
+      <div class="chip-group" id="homeType">
+        <div class="chip" onclick="selectChip(this,'homeType')">아파트</div>
+        <div class="chip" onclick="selectChip(this,'homeType')">단독주택</div>
+        <div class="chip" onclick="selectChip(this,'homeType')">빌라·다세대</div>
+        <div class="chip" onclick="selectChip(this,'homeType')">요양원</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-next" onclick="goStep(2)">다음 단계</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: 케어 유형 -->
+  <div class="step-card" id="step2">
+    <div class="step-title">필요한 케어를 선택해 주세요</div>
+    <div class="step-desc">중복 선택 가능해요. 추가 서비스는 별도 요금이 적용됩니다.</div>
+
+    <!-- 기본 케어 -->
+    <div class="care-category cat-basic">
+      <div class="care-cat-title">기본 케어</div>
+      <div class="chip-group">
+        <div class="chip" onclick="toggleChip(this)">식사 보조 및 영양 관리</div>
+        <div class="chip" onclick="toggleChip(this)">목욕·위생 케어</div>
+        <div class="chip" onclick="toggleChip(this)">이동 보조 및 낙상 예방</div>
+        <div class="chip" onclick="toggleChip(this)">병원 동행</div>
+        <div class="chip" onclick="toggleChip(this)">의료진 소통 대행</div>
+      </div>
+    </div>
+
+    <!-- 신체 활동 -->
+    <div class="care-category cat-physical">
+      <div class="care-cat-title">신체 활동 케어 <span class="cat-premium-note">추가 서비스</span></div>
+      <div class="chip-group">
+        <div class="chip" onclick="toggleChip(this)">재활 요가</div>
+        <div class="chip" onclick="toggleChip(this)">시니어 필라테스</div>
+        <div class="chip" onclick="toggleChip(this)">근력 유지 운동</div>
+        <div class="chip" onclick="toggleChip(this)">산책 동행</div>
+        <div class="chip" onclick="toggleChip(this)">외출 활동 지원</div>
+      </div>
+    </div>
+
+    <!-- 인지·정서 -->
+    <div class="care-category cat-cognitive">
+      <div class="care-cat-title">인지·정서 케어 <span class="cat-premium-note">추가 서비스</span></div>
+      <div class="chip-group">
+        <div class="chip" onclick="toggleChip(this)">치매 예방 인지 학습</div>
+        <div class="chip" onclick="toggleChip(this)">치매 맞춤 놀이 치료</div>
+        <div class="chip" onclick="toggleChip(this)">회상 요법</div>
+        <div class="chip" onclick="toggleChip(this)">음악 감상·악기 활동</div>
+        <div class="chip" onclick="toggleChip(this)">미술·그림 활동</div>
+        <div class="chip" onclick="toggleChip(this)">심리 안정·말벗</div>
+      </div>
+    </div>
+
+    <!-- 생활 enrichment -->
+    <div class="care-category cat-life">
+      <div class="care-cat-title">생활 활동 <span class="cat-premium-note">추가 서비스</span></div>
+      <div class="chip-group">
+        <div class="chip" onclick="toggleChip(this)">서예·공예 취미 활동</div>
+        <div class="chip" onclick="toggleChip(this)">원예 활동</div>
+        <div class="chip" onclick="toggleChip(this)">종교 활동 동행</div>
+        <div class="chip" onclick="toggleChip(this)">영상통화·디지털 기기 도움</div>
+        <div class="chip" onclick="toggleChip(this)">손자녀 픽업 동행</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(1)">이전</button>
+      <button class="btn-next" onclick="goStep(3)">다음 단계</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: 매칭 조건 -->
+  <div class="step-card" id="step3">
+    <div class="step-title">매칭 조건을 설정해 주세요</div>
+    <div class="step-desc">어르신께 꼭 맞는 요양보호사를 찾기 위한 조건이에요.</div>
+
+    <div class="field">
+      <label class="field-label">요양보호사 선호 성별</label>
+      <div class="chip-group" id="careGender">
+        <div class="chip" onclick="selectChip(this,'careGender')">무관</div>
+        <div class="chip" onclick="selectChip(this,'careGender')">여성 선호</div>
+        <div class="chip" onclick="selectChip(this,'careGender')">남성 선호</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">종교 일치 선호</label>
+      <div class="chip-group" id="religion">
+        <div class="chip" onclick="selectChip(this,'religion')">무관</div>
+        <div class="chip" onclick="selectChip(this,'religion')">기독교</div>
+        <div class="chip" onclick="selectChip(this,'religion')">불교</div>
+        <div class="chip" onclick="selectChip(this,'religion')">천주교</div>
+        <div class="chip" onclick="selectChip(this,'religion')">무교</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">반려동물 가능 여부</label>
+      <div class="chip-group" id="petOk">
+        <div class="chip" onclick="selectChip(this,'petOk')">무관</div>
+        <div class="chip" onclick="selectChip(this,'petOk')">반려동물 있음 (가능 필요)</div>
+        <div class="chip" onclick="selectChip(this,'petOk')">반려동물 없음</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 차량 강조 -->
+    <div class="field">
+      <label class="field-label">차량 보유 요양보호사 필요 여부</label>
+      <div class="car-box" id="carBox" onclick="toggleCar()">
+        <div class="car-icon">🚗</div>
+        <div class="car-box-text">
+          <strong>차량 보유 요양보호사 우선 매칭</strong>
+          <span>긴급 이동·병원 방문 시 빠르게 대응할 수 있어요</span>
+        </div>
+        <div class="car-check" id="carCheck"></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <label class="field-label">주 케어 횟수</label>
+      <div class="count-row">
+        <button class="count-btn" onclick="changeCount('week',-1)">−</button>
+        <div class="count-val" id="weekVal">3</div>
+        <div class="count-unit">회 / 주</div>
+        <button class="count-btn" onclick="changeCount('week',1)">+</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">1회 케어 시간</label>
+      <div class="count-row">
+        <button class="count-btn" onclick="changeCount('hour',-1)">−</button>
+        <div class="count-val" id="hourVal">3</div>
+        <div class="count-unit">시간 / 회</div>
+        <button class="count-btn" onclick="changeCount('hour',1)">+</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">케어 시작 시기</label>
+      <div class="chip-group" id="startTime">
+        <div class="chip" onclick="selectChip(this,'startTime')">최대한 빨리</div>
+        <div class="chip" onclick="selectChip(this,'startTime')">1주일 이내</div>
+        <div class="chip" onclick="selectChip(this,'startTime')">1개월 이내</div>
+        <div class="chip" onclick="selectChip(this,'startTime')">미정</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(2)">이전</button>
+      <button class="btn-next" onclick="goStep(4)">등록 완료</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: 완료 -->
+  <div class="step-card" id="step4">
+    <div class="complete-wrap">
+      <div class="complete-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="complete-title">등록이 완료됐어요!</div>
+      <div class="complete-desc">
+        입력하신 조건을 바탕으로<br>꼭 맞는 요양보호사를 찾아드릴게요.<br>
+        <strong>보통 24시간 이내</strong>에 매칭 결과를 안내해드립니다.
+      </div>
+
+      <div class="complete-summary" id="summaryBox"></div>
+
+      <button class="btn-full" onclick="location.href='chamse_landing_v3.html'">홈으로 돌아가기</button>
+      <button class="btn-outline">매칭 현황 확인하기</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let weekCount = 3, hourCount = 3;
+let carSelected = false;
+
+function goStep(n) {
+  document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  ['sl1','sl2','sl3','sl4'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('active','done');
+    if (i + 1 === n) el.classList.add('active');
+    else if (i + 1 < n) el.classList.add('done');
+  });
+  const pct = [25, 50, 75, 100][n - 1];
+  document.getElementById('progressBar').style.width = pct + '%';
+  if (n === 4) buildSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectChip(el, groupId) {
+  document.querySelectorAll('#' + groupId + ' .chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function toggleChip(el) {
+  el.classList.toggle('selected');
+}
+
+function toggleCar() {
+  carSelected = !carSelected;
+  document.getElementById('carBox').classList.toggle('selected', carSelected);
+  document.getElementById('carCheck').style.background = carSelected ? '#fd7e14' : '';
+}
+
+function changeCount(type, delta) {
+  if (type === 'week') {
+    weekCount = Math.min(7, Math.max(1, weekCount + delta));
+    document.getElementById('weekVal').textContent = weekCount;
+  } else {
+    hourCount = Math.min(12, Math.max(1, hourCount + delta));
+    document.getElementById('hourVal').textContent = hourCount;
+  }
+}
+
+function getSelected(groupId) {
+  const el = document.querySelector('#' + groupId + ' .chip.selected');
+  return el ? el.textContent : '미선택';
+}
+
+function getMultiSelected() {
+  const chips = document.querySelectorAll('#step2 .chip.selected');
+  if (!chips.length) return '선택 없음';
+  return Array.from(chips).map(c => c.textContent).join(', ');
+}
+
+function buildSummary() {
+  const rows = [
+    ['지역', getSelected('seniorRegion') !== '미선택' ? document.getElementById('seniorRegion').value || '미입력' : '미입력'],
+    ['어르신 성별·연령', getSelected('seniorGender') + ' · ' + (document.getElementById('seniorAge').value || '미선택')],
+    ['선택한 케어', getMultiSelected()],
+    ['요양보호사 성별', getSelected('careGender')],
+    ['차량 보유 요청', carSelected ? '차량 보유 우선 매칭' : '무관'],
+    ['케어 일정', `주 ${weekCount}회 · 1회 ${hourCount}시간`],
+    ['시작 시기', getSelected('startTime')],
+  ];
+  document.getElementById('summaryBox').innerHTML = rows.map(([k, v]) =>
+    `<div class="summary-row"><span class="summary-key">${k}</span><span class="summary-val">${v}</span></div>`
+  ).join('');
+}
+
+document.getElementById('seniorRegion').addEventListener('change', function() {});
+</script>
+</body>
+</html>
