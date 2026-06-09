@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>요양보호사 등록 — 참새</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky: #4ab8e8;
+  --sky-dark: #1a9fd4;
+  --sky-light: #eaf6fd;
+  --sky-pale: #f5fbff;
+  --sky-border: #c2e6f7;
+  --white: #ffffff;
+  --gray-50: #f8f9fa;
+  --gray-100: #f1f3f5;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-900: #212529;
+  --green: #28a745;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --sans: 'Noto Sans KR', sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--gray-50);
+  color: var(--gray-900);
+  line-height: 1.6;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  height: 60px;
+  display: flex; align-items: center;
+  padding: 0 6%;
+  position: sticky; top: 0; z-index: 100;
+  justify-content: space-between;
+}
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.logo-mark {
+  width: 28px; height: 28px; background: var(--sky);
+  border-radius: 7px; display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.logo-text { font-size: 18px; font-weight: 700; color: var(--gray-900); letter-spacing: -.03em; }
+.nav-back {
+  font-size: 13px; color: var(--gray-600); text-decoration: none;
+  display: flex; align-items: center; gap: 4px;
+  padding: 6px 10px; border-radius: 8px;
+  transition: background .15s;
+}
+.nav-back:hover { background: var(--gray-100); }
+
+/* PROGRESS */
+.progress-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 20px 6%;
+}
+.progress-inner { max-width: 680px; margin: 0 auto; }
+.step-labels {
+  display: flex; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.step-label {
+  font-size: 11px; font-weight: 500;
+  color: var(--gray-500);
+  display: flex; align-items: center; gap: 5px;
+}
+.step-label.active { color: var(--sky-dark); font-weight: 700; }
+.step-label.done { color: var(--green); }
+.step-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--gray-300);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--gray-500);
+  flex-shrink: 0;
+}
+.step-label.active .step-dot { border-color: var(--sky); background: var(--sky); color: white; }
+.step-label.done .step-dot { border-color: var(--green); background: var(--green); color: white; }
+.progress-bar-wrap {
+  height: 4px; background: var(--gray-200); border-radius: 4px; overflow: hidden;
+}
+.progress-bar {
+  height: 100%; background: var(--sky); border-radius: 4px;
+  transition: width .4s ease;
+}
+</style>
+<style>
+/* MAIN */
+.main { max-width: 680px; margin: 0 auto; padding: 36px 6% 80px; }
+
+/* STEP CARD */
+.step-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 32px;
+  display: none;
+}
+.step-card.active { display: block; }
+.step-title {
+  font-size: 20px; font-weight: 700;
+  color: var(--gray-900); letter-spacing: -.03em;
+  margin-bottom: 6px;
+}
+.step-desc { font-size: 14px; color: var(--gray-600); margin-bottom: 28px; line-height: 1.7; }
+
+/* FORM */
+.field { margin-bottom: 20px; }
+.field-label {
+  display: block; font-size: 14px; font-weight: 600;
+  color: var(--gray-700); margin-bottom: 7px;
+}
+.field-label .req { color: var(--sky-dark); margin-left: 2px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+input[type="text"], input[type="tel"], input[type="email"], input[type="number"], input[type="date"], select, textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  font-size: 15px; font-family: var(--sans);
+  color: var(--gray-900);
+  background: var(--white);
+  transition: border-color .15s;
+  outline: none;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(74,184,232,.12);
+}
+textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: '▾'; position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%); color: var(--gray-500); pointer-events: none;
+  font-size: 13px;
+}
+.hint { font-size: 12px; color: var(--gray-500); margin-top: 5px; }
+
+/* CHIP */
+.chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 8px 14px; border-radius: 20px;
+  border: 1.5px solid var(--gray-300);
+  background: var(--white); color: var(--gray-700);
+  font-size: 13px; font-weight: 500; font-family: var(--sans);
+  cursor: pointer; transition: all .15s; user-select: none;
+}
+.chip:hover { border-color: var(--sky); color: var(--sky-dark); }
+.chip.selected { background: var(--sky); border-color: var(--sky); color: white; font-weight: 600; }
+
+/* 자격증 업로드 */
+.upload-zone {
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius);
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  background: var(--gray-50);
+}
+.upload-zone:hover { border-color: var(--sky); background: var(--sky-pale); }
+.upload-zone.has-file { border-color: var(--green); background: #f0fdf4; }
+.upload-icon { font-size: 32px; margin-bottom: 10px; }
+.upload-title { font-size: 15px; font-weight: 600; color: var(--gray-700); margin-bottom: 4px; }
+.upload-sub { font-size: 13px; color: var(--gray-500); }
+.upload-preview {
+  display: none;
+  align-items: center; gap: 12px;
+  background: #f0fdf4; border: 1.5px solid #86efac;
+  border-radius: var(--radius-sm); padding: 12px 16px;
+  margin-top: 12px;
+}
+.upload-preview.show { display: flex; }
+.preview-icon { font-size: 24px; }
+.preview-name { font-size: 13px; font-weight: 600; color: #166534; flex: 1; }
+.preview-remove {
+  font-size: 12px; color: var(--gray-500); cursor: pointer;
+  padding: 2px 6px; border-radius: 4px;
+  transition: background .15s;
+}
+.preview-remove:hover { background: var(--gray-200); }
+
+/* 경력 타임라인 */
+.career-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.career-item {
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm); padding: 16px;
+  background: var(--gray-50); position: relative;
+}
+.career-item-head {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 12px;
+}
+.career-item-num {
+  font-size: 12px; font-weight: 700;
+  color: var(--sky-dark); background: var(--sky-light);
+  border-radius: 20px; padding: 2px 10px;
+}
+.career-remove {
+  font-size: 12px; color: var(--gray-500); cursor: pointer;
+  padding: 3px 8px; border-radius: 6px; border: 1px solid var(--gray-300);
+  background: var(--white); transition: all .15s;
+}
+.career-remove:hover { color: var(--red); border-color: var(--red); }
+.add-career-btn {
+  width: 100%; padding: 11px;
+  border: 1.5px dashed var(--sky-border);
+  border-radius: var(--radius-sm);
+  background: var(--sky-pale); color: var(--sky-dark);
+  font-size: 14px; font-weight: 600; font-family: var(--sans);
+  cursor: pointer; transition: all .15s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.add-career-btn:hover { background: var(--sky-light); border-color: var(--sky); }
+
+/* 케어 카테고리 */
+.care-section { margin-bottom: 28px; }
+.care-cat-title {
+  font-size: 12px; font-weight: 700;
+  color: var(--gray-600); letter-spacing: .04em;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.care-cat-bar {
+  width: 3px; height: 14px; border-radius: 2px; display: inline-block; flex-shrink: 0;
+}
+.bar-basic { background: #6c757d; }
+.bar-physical { background: #20c997; }
+.bar-cognitive { background: #845ef7; }
+.bar-life { background: #fd7e14; }
+.tier-note {
+  display: inline-block;
+  font-size: 11px; font-weight: 600; color: #fd7e14;
+  background: #fff4e6; border: 1px solid #ffd8a8;
+  border-radius: 10px; padding: 2px 8px; margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* 활동 조건 */
+.condition-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.condition-card {
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm); padding: 16px;
+  cursor: pointer; transition: all .15s; user-select: none;
+}
+.condition-card:hover { border-color: var(--sky); }
+.condition-card.selected { border-color: var(--sky); background: var(--sky-pale); }
+.condition-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.condition-card-desc { font-size: 12px; color: var(--gray-600); }
+
+/* 요율 미리보기 */
+.rate-preview {
+  background: var(--sky-pale);
+  border: 1.5px solid var(--sky-border);
+  border-radius: var(--radius-sm);
+  padding: 20px; margin-top: 8px;
+}
+.rate-preview-title { font-size: 13px; font-weight: 700; color: var(--sky-dark); margin-bottom: 12px; }
+.rate-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--sky-border); }
+.rate-row:last-child { border-bottom: none; }
+.rate-label { font-size: 13px; color: var(--gray-700); }
+.rate-value { font-size: 14px; font-weight: 700; color: var(--gray-900); }
+.rate-value.highlight { color: var(--sky-dark); font-size: 16px; }
+
+/* SECTION DIVIDER */
+.divider { height: 1px; background: var(--gray-200); margin: 24px 0; }
+.section-head {
+  font-size: 15px; font-weight: 700; color: var(--gray-800);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-head::before {
+  content: ''; width: 4px; height: 18px;
+  background: var(--sky); border-radius: 2px; display: inline-block;
+}
+
+/* 약관 */
+.agree-box {
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm); overflow: hidden;
+}
+.agree-all {
+  padding: 14px 16px;
+  background: var(--gray-50);
+  border-bottom: 1.5px solid var(--gray-200);
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+}
+.agree-item {
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--gray-200); cursor: pointer;
+}
+.agree-item:last-child { border-bottom: none; }
+.agree-left { display: flex; align-items: center; gap: 10px; }
+.agree-text { font-size: 14px; color: var(--gray-700); }
+.agree-text strong { font-weight: 600; }
+.agree-link { font-size: 12px; color: var(--sky-dark); text-decoration: underline; white-space: nowrap; }
+.checkbox-custom {
+  width: 20px; height: 20px; border-radius: 5px;
+  border: 2px solid var(--gray-300); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.checkbox-custom.checked { background: var(--sky); border-color: var(--sky); }
+.checkbox-custom.checked::after { content: '✓'; color: white; font-size: 12px; font-weight: 700; }
+
+/* 검토 카드 */
+.review-section { margin-bottom: 24px; }
+.review-title {
+  font-size: 13px; font-weight: 700; color: var(--gray-500);
+  letter-spacing: .05em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.review-row {
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 12px; background: var(--gray-50);
+  border-radius: var(--radius-sm);
+}
+.review-row.full { grid-column: 1 / -1; }
+.review-key { font-size: 12px; color: var(--gray-500); font-weight: 500; }
+.review-val { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+.review-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.review-chip {
+  font-size: 11px; font-weight: 600; color: var(--sky-dark);
+  background: var(--sky-light); border-radius: 10px; padding: 2px 8px;
+}
+
+/* 티어 배지 */
+.tier-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 20px;
+  font-size: 13px; font-weight: 700;
+}
+.tier-basic { background: #f1f3f5; color: #495057; }
+.tier-care { background: #e8f5e9; color: #2e7d32; }
+.tier-wellness { background: #ede7f6; color: #6a1b9a; }
+.tier-pro { background: #fff3e0; color: #e65100; }
+
+/* 버튼 */
+.btn-row {
+  display: flex; gap: 10px; margin-top: 32px;
+}
+.btn-prev, .btn-next, .btn-submit {
+  padding: 13px 28px; border-radius: var(--radius-sm);
+  font-size: 15px; font-weight: 700; font-family: var(--sans);
+  cursor: pointer; transition: all .15s; border: none;
+}
+.btn-prev {
+  background: var(--white); color: var(--gray-700);
+  border: 1.5px solid var(--gray-300); flex: 0 0 auto;
+}
+.btn-prev:hover { background: var(--gray-100); }
+.btn-next, .btn-submit { background: var(--sky); color: white; flex: 1; }
+.btn-next:hover, .btn-submit:hover { background: var(--sky-dark); }
+
+/* 완료 화면 */
+.complete-wrap {
+  display: none; text-align: center;
+  max-width: 480px; margin: 60px auto;
+  padding: 0 6%;
+}
+.complete-wrap.show { display: block; }
+.complete-icon { font-size: 64px; margin-bottom: 20px; }
+.complete-title { font-size: 24px; font-weight: 700; color: var(--gray-900); margin-bottom: 10px; letter-spacing: -.04em; }
+.complete-desc { font-size: 15px; color: var(--gray-600); line-height: 1.8; margin-bottom: 32px; }
+.complete-card {
+  background: var(--sky-pale); border: 1.5px solid var(--sky-border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 28px; text-align: left;
+}
+.complete-card-title { font-size: 14px; font-weight: 700; color: var(--sky-dark); margin-bottom: 12px; }
+.complete-step { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; }
+.complete-step-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--sky); color: white;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.complete-step-text { font-size: 14px; color: var(--gray-700); }
+.btn-home {
+  display: inline-block; padding: 13px 32px;
+  background: var(--sky); color: white;
+  border-radius: var(--radius-sm); font-size: 15px; font-weight: 700;
+  text-decoration: none; transition: background .15s;
+}
+.btn-home:hover { background: var(--sky-dark); }
+
+@media (max-width: 520px) {
+  .step-label span:not(.step-dot) { display: none; }
+  .field-row, .field-row-3, .condition-grid, .review-grid { grid-template-columns: 1fr; }
+  .step-card { padding: 22px 18px; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="chamse_landing_v3.html">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+    </div>
+    <span class="logo-text">참새</span>
+  </a>
+  <a class="nav-back" href="chamse_landing_v3.html">← 홈으로</a>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-inner">
+    <div class="step-labels">
+      <div class="step-label active" id="sl1"><div class="step-dot">1</div><span>기본 정보</span></div>
+      <div class="step-label" id="sl2"><div class="step-dot">2</div><span>자격증·경력</span></div>
+      <div class="step-label" id="sl3"><div class="step-dot">3</div><span>케어 능력</span></div>
+      <div class="step-label" id="sl4"><div class="step-dot">4</div><span>활동 조건</span></div>
+      <div class="step-label" id="sl5"><div class="step-dot">5</div><span>검토·제출</span></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar" style="width:20%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="mainArea">
+
+  <!-- STEP 1: 기본 정보 -->
+  <div class="step-card active" id="step1">
+    <div class="step-title">기본 정보를 입력해주세요</div>
+    <div class="step-desc">요양보호사로 활동할 정보를 입력합니다. 개인정보는 암호화되어 안전하게 보호됩니다.</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">이름 <span class="req">*</span></label>
+        <input type="text" id="f_name" placeholder="홍길동">
+      </div>
+      <div class="field">
+        <label class="field-label">생년월일 <span class="req">*</span></label>
+        <input type="date" id="f_birth">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">성별 <span class="req">*</span></label>
+        <div class="chip-group">
+          <div class="chip" onclick="selectOne(this,'gender')">여성</div>
+          <div class="chip" onclick="selectOne(this,'gender')">남성</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">연락처 <span class="req">*</span></label>
+        <input type="tel" id="f_phone" placeholder="010-0000-0000">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">이메일</label>
+      <input type="email" id="f_email" placeholder="example@email.com">
+    </div>
+
+    <div class="field">
+      <label class="field-label">활동 지역 <span class="req">*</span></label>
+      <div class="field-row">
+        <div class="select-wrap">
+          <select id="f_region1" onchange="updateDistrict()">
+            <option value="">시·도 선택</option>
+            <option value="daegu">대구광역시</option>
+            <option value="seoul">서울특별시</option>
+            <option value="busan">부산광역시</option>
+            <option value="incheon">인천광역시</option>
+            <option value="gwangju">광주광역시</option>
+            <option value="daejeon">대전광역시</option>
+            <option value="ulsan">울산광역시</option>
+            <option value="gyeonggi">경기도</option>
+          </select>
+        </div>
+        <div class="select-wrap">
+          <select id="f_region2">
+            <option value="">구·군 선택</option>
+          </select>
+        </div>
+      </div>
+      <p class="hint">활동 가능 지역을 중심으로 매칭이 이루어집니다.</p>
+    </div>
+
+    <div class="field">
+      <label class="field-label">자기소개 <span class="req">*</span></label>
+      <textarea id="f_intro" placeholder="어르신 돌봄에 대한 철학, 경험, 장점 등을 자유롭게 써주세요. (50자 이상 권장)"></textarea>
+      <p class="hint" id="introCount">0 / 300자</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-next" onclick="goStep(2)">다음 단계 →</button>
+    </div>
+  </div>
+
+
+  <!-- STEP 2: 자격증·경력 -->
+  <div class="step-card" id="step2">
+    <div class="step-title">자격증과 경력을 입력해주세요</div>
+    <div class="step-desc">보유한 자격증과 근무 경력을 입력하면 적합한 티어로 배정됩니다.</div>
+
+    <div class="section-head">보유 자격증</div>
+
+    <div class="field">
+      <label class="field-label">요양보호사 자격증 <span class="req">*</span></label>
+      <div class="upload-zone" id="licUploadZone" onclick="document.getElementById('licFile').click()">
+        <div class="upload-icon">📄</div>
+        <div class="upload-title">자격증 사진을 업로드해주세요</div>
+        <div class="upload-sub">JPG, PNG, PDF · 최대 10MB</div>
+      </div>
+      <input type="file" id="licFile" accept="image/*,.pdf" style="display:none" onchange="handleUpload(this,'licUploadZone','licPreview','licName')">
+      <div class="upload-preview" id="licPreview">
+        <span class="preview-icon">✅</span>
+        <span class="preview-name" id="licName"></span>
+        <span class="preview-remove" onclick="removeFile('licFile','licUploadZone','licPreview')">삭제</span>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">자격증 번호</label>
+        <input type="text" id="f_licnum" placeholder="제 2024-XXXXX호">
+      </div>
+      <div class="field">
+        <label class="field-label">취득 연도</label>
+        <div class="select-wrap">
+          <select id="f_licyear"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">추가 자격증 (복수 선택)</label>
+      <div class="chip-group">
+        <div class="chip" onclick="toggle(this)">사회복지사</div>
+        <div class="chip" onclick="toggle(this)">간호조무사</div>
+        <div class="chip" onclick="toggle(this)">물리치료사</div>
+        <div class="chip" onclick="toggle(this)">작업치료사</div>
+        <div class="chip" onclick="toggle(this)">치매전문케어사</div>
+        <div class="chip" onclick="toggle(this)">호스피스돌봄사</div>
+        <div class="chip" onclick="toggle(this)">응급처치(CPR)</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-head">근무 경력</div>
+
+    <div class="career-list" id="careerList">
+      <div class="career-item" id="career1">
+        <div class="career-item-head">
+          <span class="career-item-num">경력 1</span>
+          <button class="career-remove" onclick="removeCareer(1)" style="display:none">삭제</button>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">근무처명</label>
+            <input type="text" placeholder="○○요양원">
+          </div>
+          <div class="field">
+            <label class="field-label">근무 유형</label>
+            <div class="select-wrap">
+              <select>
+                <option value="">선택</option>
+                <option>요양원</option>
+                <option>재가방문</option>
+                <option>병원동행</option>
+                <option>요양병원</option>
+                <option>공동생활가정</option>
+                <option>기타</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">근무 시작</label>
+            <input type="date">
+          </div>
+          <div class="field">
+            <label class="field-label">근무 종료</label>
+            <input type="date" placeholder="재직 중이면 비워두세요">
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="add-career-btn" onclick="addCareer()">+ 경력 추가</button>
+
+    <div class="btn-row">
+      <button class="btn-prev" onclick="goStep(1)">← 이전</button>
+      <button class="btn-next" onclick="goStep(3)">다음 단계 →</button>
+    </div>
+  </div>
+
+
+  <!-- STEP 3: 케어 능력 -->
+  <div class="step-card" id="step3">
+    <div class="step-title">제공 가능한 케어를 선택해주세요</div>
+    <div class="step-desc">선택한 항목이 많을수록 더 높은 티어로 배정될 수 있습니다. 실제로 제공 가능한 서비스만 선택해주세요.</div>
+
+    <div class="care-section">
+      <div class="care-cat-title"><span class="care-cat-bar bar-basic"></span>기본 케어</div>
+      <div class="chip-group">
+        <div class="chip" onclick="toggle(this)">말동무·정서 지원</div>
+        <div class="chip" onclick="toggle(this)">식사 보조</div>
+        <div class="chip" onclick="toggle(this)">투약 관리</div>
+        <div class="chip" onclick="toggle(this)">일상 안전 확인</div>
+        <div class="chip" onclick="toggle(this)">병원 동행</div>
+      </div>
+    </div>
+
+    <div class="care-section">
+      <div class="care-cat-title"><span class="care-cat-bar bar-physical"></span>신체 케어</div>
+      <div class="chip-group">
+        <div class="chip" onclick="toggle(this)">이동 보조</div>
+        <div class="chip" onclick="toggle(this)">목욕·위생</div>
+        <div class="chip" onclick="toggle(this)">욕창 예방</div>
+        <div class="chip" onclick="toggle(this)">재활 운동 보조</div>
+        <div class="chip" onclick="toggle(this)">낙상 예방</div>
+        <div class="chip" onclick="toggle(this)">경관 영양</div>
+      </div>
+    </div>
+
+    <div class="care-section">
+      <div class="care-cat-title">
+        <span class="care-cat-bar bar-cognitive"></span>인지 케어
+        <span class="tier-note">Care+ 이상</span>
+      </div>
+      <div class="chip-group">
+        <div class="chip" onclick="toggle(this)">치매 케어</div>
+        <div class="chip" onclick="toggle(this)">인지 훈련 활동</div>
+        <div class="chip" onclick="toggle(this)">회상 치료</div>
+        <div class="chip" onclick="toggle(this)">행동 증상 관리</div>
+      </div>
+    </div>
+
+    <div class="care-section">
+      <div class="care-cat-title">
+        <span class="care-cat-bar bar-life"></span>생활 지원
+        <span class="tier-note">Wellness 이상</span>
+      </div>
+      <div class="chip-group">
+        <div class="chip" onclick="toggle(this)">가사 보조</div>
+        <div class="chip" onclick="toggle(this)">식사 준비</div>
+        <div class="chip" onclick="toggle(this)">장보기·외출</div>
+        <div class="chip" onclick="toggle(this)">야간·24시간</div>
+        <div class="chip" onclick="toggle(this)">호스피스 돌봄</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-head">케어 가능 조건</div>
+
+    <div class="field">
+      <label class="field-label">돌봄 가능 대상</label>
+      <div class="chip-group">
+        <div class="chip" onclick="toggle(this)">경증 (장기요양 4~5등급)</div>
+        <div class="chip" onclick="toggle(this)">중등증 (3등급)</div>
+        <div class="chip" onclick="toggle(this)">중증 (1~2등급)</div>
+        <div class="chip" onclick="toggle(this)">인지지원등급</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">반려동물 있는 가정</label>
+      <div class="chip-group">
+        <div class="chip" onclick="selectOne(this,'pet')">가능</div>
+        <div class="chip" onclick="selectOne(this,'pet')">불가</div>
+        <div class="chip" onclick="selectOne(this,'pet')">소형견만 가능</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">흡연 가정</label>
+      <div class="chip-group">
+        <div class="chip" onclick="selectOne(this,'smoke')">가능</div>
+        <div class="chip" onclick="selectOne(this,'smoke')">불가</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-prev" onclick="goStep(2)">← 이전</button>
+      <button class="btn-next" onclick="goStep(4)">다음 단계 →</button>
+    </div>
+  </div>
+
+
+  <!-- STEP 4: 활동 조건 -->
+  <div class="step-card" id="step4">
+    <div class="step-title">활동 조건을 설정해주세요</div>
+    <div class="step-desc">원하는 근무 형태와 시간대를 설정하면 맞춤 매칭이 이루어집니다.</div>
+
+    <div class="field">
+      <label class="field-label">근무 형태 <span class="req">*</span></label>
+      <div class="condition-grid">
+        <div class="condition-card" onclick="toggleCard(this,'worktype')">
+          <div class="condition-card-title">🕐 시간제</div>
+          <div class="condition-card-desc">하루 1~8시간, 필요한 시간만</div>
+        </div>
+        <div class="condition-card" onclick="toggleCard(this,'worktype')">
+          <div class="condition-card-title">📅 일일 방문</div>
+          <div class="condition-card-desc">하루 단위 재가 방문</div>
+        </div>
+        <div class="condition-card" onclick="toggleCard(this,'worktype')">
+          <div class="condition-card-title">🌙 야간 전담</div>
+          <div class="condition-card-desc">야간 집중 돌봄</div>
+        </div>
+        <div class="condition-card" onclick="toggleCard(this,'worktype')">
+          <div class="condition-card-title">🏠 입주</div>
+          <div class="condition-card-desc">24시간 상주 케어</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">활동 가능 요일</label>
+      <div class="chip-group">
+        <div class="chip" onclick="toggle(this)">월</div>
+        <div class="chip" onclick="toggle(this)">화</div>
+        <div class="chip" onclick="toggle(this)">수</div>
+        <div class="chip" onclick="toggle(this)">목</div>
+        <div class="chip" onclick="toggle(this)">금</div>
+        <div class="chip" onclick="toggle(this)">토</div>
+        <div class="chip" onclick="toggle(this)">일</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">활동 가능 시간대</label>
+      <div class="chip-group">
+        <div class="chip" onclick="toggle(this)">오전 (06~12시)</div>
+        <div class="chip" onclick="toggle(this)">오후 (12~18시)</div>
+        <div class="chip" onclick="toggle(this)">저녁 (18~22시)</div>
+        <div class="chip" onclick="toggle(this)">야간 (22~06시)</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">희망 시급 (원)</label>
+        <input type="number" id="f_wage" placeholder="12000" min="10000" step="500">
+        <p class="hint">최저 시급 이상으로 설정해주세요.</p>
+      </div>
+      <div class="field">
+        <label class="field-label">활동 시작 가능일</label>
+        <input type="date" id="f_startdate">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-head">예상 티어 미리보기</div>
+
+    <div class="rate-preview" id="tierPreview">
+      <div class="rate-preview-title">📊 입력 정보 기반 예상 티어</div>
+      <div class="rate-row">
+        <span class="rate-label">예상 배정 티어</span>
+        <span class="rate-value highlight" id="previewTier">Basic</span>
+      </div>
+      <div class="rate-row">
+        <span class="rate-label">플랫폼 추천 시급</span>
+        <span class="rate-value" id="previewWage">12,000원~</span>
+      </div>
+      <div class="rate-row">
+        <span class="rate-label">매칭 우선 노출</span>
+        <span class="rate-value" id="previewExposure">일반</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-prev" onclick="goStep(3)">← 이전</button>
+      <button class="btn-next" onclick="goStep(5)">검토하기 →</button>
+    </div>
+  </div>
+
+
+  <!-- STEP 5: 검토·제출 -->
+  <div class="step-card" id="step5">
+    <div class="step-title">입력 내용을 확인해주세요</div>
+    <div class="step-desc">아래 내용으로 요양보호사 등록이 진행됩니다. 수정이 필요하면 이전 단계로 돌아가세요.</div>
+
+    <div class="review-section">
+      <div class="review-title">기본 정보</div>
+      <div class="review-grid">
+        <div class="review-row">
+          <span class="review-key">이름</span>
+          <span class="review-val" id="rv_name">—</span>
+        </div>
+        <div class="review-row">
+          <span class="review-key">연락처</span>
+          <span class="review-val" id="rv_phone">—</span>
+        </div>
+        <div class="review-row">
+          <span class="review-key">성별</span>
+          <span class="review-val" id="rv_gender">—</span>
+        </div>
+        <div class="review-row">
+          <span class="review-key">활동 지역</span>
+          <span class="review-val" id="rv_region">—</span>
+        </div>
+        <div class="review-row full">
+          <span class="review-key">자기소개</span>
+          <span class="review-val" id="rv_intro" style="font-weight:400;font-size:13px;color:var(--gray-700);line-height:1.6;">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="review-section">
+      <div class="review-title">자격증·경력</div>
+      <div class="review-grid">
+        <div class="review-row">
+          <span class="review-key">자격증 번호</span>
+          <span class="review-val" id="rv_licnum">—</span>
+        </div>
+        <div class="review-row">
+          <span class="review-key">취득 연도</span>
+          <span class="review-val" id="rv_licyear">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="review-section">
+      <div class="review-title">활동 조건</div>
+      <div class="review-grid">
+        <div class="review-row">
+          <span class="review-key">희망 시급</span>
+          <span class="review-val" id="rv_wage">—</span>
+        </div>
+        <div class="review-row">
+          <span class="review-key">예상 티어</span>
+          <span class="review-val" id="rv_tier">Basic</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 약관 동의 -->
+    <div class="section-head">약관 동의</div>
+    <div class="agree-box">
+      <div class="agree-all" onclick="toggleAll()">
+        <div class="checkbox-custom" id="cb_all"></div>
+        <span style="font-size:15px;font-weight:700;color:var(--gray-900)">전체 동의</span>
+      </div>
+      <div class="agree-item" onclick="toggleAgree('cb1')">
+        <div class="agree-left">
+          <div class="checkbox-custom" id="cb1"></div>
+          <span class="agree-text"><strong>[필수]</strong> 이용약관 동의</span>
+        </div>
+        <span class="agree-link">보기</span>
+      </div>
+      <div class="agree-item" onclick="toggleAgree('cb2')">
+        <div class="agree-left">
+          <div class="checkbox-custom" id="cb2"></div>
+          <span class="agree-text"><strong>[필수]</strong> 개인정보 처리방침 동의</span>
+        </div>
+        <span class="agree-link">보기</span>
+      </div>
+      <div class="agree-item" onclick="toggleAgree('cb3')">
+        <div class="agree-left">
+          <div class="checkbox-custom" id="cb3"></div>
+          <span class="agree-text"><strong>[필수]</strong> 요양보호사 활동 정보 제공 동의</span>
+        </div>
+        <span class="agree-link">보기</span>
+      </div>
+      <div class="agree-item" onclick="toggleAgree('cb4')">
+        <div class="agree-left">
+          <div class="checkbox-custom" id="cb4"></div>
+          <span class="agree-text"><strong>[선택]</strong> 마케팅 정보 수신 동의</span>
+        </div>
+        <span class="agree-link">보기</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-prev" onclick="goStep(4)">← 이전</button>
+      <button class="btn-submit" onclick="submitForm()">등록 신청하기 🐦</button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- 완료 화면 -->
+<div class="complete-wrap" id="completeWrap">
+  <div class="complete-icon">🎉</div>
+  <div class="complete-title">등록 신청이 완료됐어요!</div>
+  <div class="complete-desc">참새 운영팀이 제출하신 정보를 검토한 후<br>영업일 1~2일 이내로 연락드릴게요.</div>
+  <div class="complete-card">
+    <div class="complete-card-title">⏳ 이후 진행 절차</div>
+    <div class="complete-step">
+      <div class="complete-step-num">1</div>
+      <div class="complete-step-text">운영팀이 자격증 및 경력을 확인합니다 (1~2 영업일)</div>
+    </div>
+    <div class="complete-step">
+      <div class="complete-step-num">2</div>
+      <div class="complete-step-text">입력 정보를 바탕으로 티어가 배정됩니다</div>
+    </div>
+    <div class="complete-step">
+      <div class="complete-step-num">3</div>
+      <div class="complete-step-text">승인 완료 후 매칭 요청을 받을 수 있습니다</div>
+    </div>
+    <div class="complete-step">
+      <div class="complete-step-num">4</div>
+      <div class="complete-step-text">앱 또는 문자로 매칭 요청 알림을 받게 됩니다</div>
+    </div>
+  </div>
+  <a class="btn-home" href="chamse_landing_v3.html">홈으로 돌아가기</a>
+</div>
+
+
+<script>
+const DISTRICTS = {
+  daegu: ['수성구','달서구','중구','동구','서구','북구','남구','달성군'],
+  seoul: ['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'],
+  busan: ['해운대구','수영구','남구','동구','서구','북구','사하구','금정구','연제구','진구','사상구','강서구','동래구','영도구','기장군'],
+  incheon: ['남동구','부평구','계양구','미추홀구','연수구','서구','동구','중구','강화군','옹진군'],
+  gwangju: ['광산구','북구','서구','동구','남구'],
+  daejeon: ['서구','유성구','대덕구','동구','중구'],
+  ulsan: ['남구','북구','동구','중구','울주군'],
+  gyeonggi: ['수원시','성남시','용인시','고양시','화성시','부천시','안산시','남양주시','안양시','평택시','시흥시','파주시','의정부시','김포시','광주시','하남시','광명시','군포시','오산시','이천시','안성시','의왕시','여주시','양평군','동두천시','과천시','가평군','연천군'],
+};
+
+function updateDistrict() {
+  const r1 = document.getElementById('f_region1').value;
+  const r2 = document.getElementById('f_region2');
+  r2.innerHTML = '<option value="">구·군 선택</option>';
+  if (DISTRICTS[r1]) {
+    DISTRICTS[r1].forEach(d => {
+      const o = document.createElement('option');
+      o.value = d; o.textContent = d;
+      r2.appendChild(o);
+    });
+  }
+}
+
+// 자격증 취득연도 populate
+(function() {
+  const sel = document.getElementById('f_licyear');
+  sel.innerHTML = '<option value="">선택</option>';
+  for (let y = 2025; y >= 2005; y--) {
+    const o = document.createElement('option');
+    o.value = y; o.textContent = y + '년';
+    sel.appendChild(o);
+  }
+})();
+
+// 자기소개 글자수
+document.getElementById('f_intro').addEventListener('input', function() {
+  document.getElementById('introCount').textContent = this.value.length + ' / 300자';
+});
+
+// 칩 선택
+function toggle(el) {
+  el.classList.toggle('selected');
+  updateTierPreview();
+}
+function selectOne(el, group) {
+  document.querySelectorAll('[onclick*="' + group + '"]').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  updateTierPreview();
+}
+function toggleCard(el, group) {
+  document.querySelectorAll('[onclick*="' + group + '"]').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  updateTierPreview();
+}
+
+// 파일 업로드
+function handleUpload(input, zoneId, previewId, nameId) {
+  if (!input.files[0]) return;
+  const file = input.files[0];
+  document.getElementById(zoneId).classList.add('has-file');
+  document.getElementById(nameId).textContent = file.name;
+  document.getElementById(previewId).classList.add('show');
+}
+function removeFile(inputId, zoneId, previewId) {
+  document.getElementById(inputId).value = '';
+  document.getElementById(zoneId).classList.remove('has-file');
+  document.getElementById(previewId).classList.remove('show');
+}
+
+// 경력 추가/삭제
+let careerCount = 1;
+function addCareer() {
+  careerCount++;
+  const list = document.getElementById('careerList');
+  const div = document.createElement('div');
+  div.className = 'career-item';
+  div.id = 'career' + careerCount;
+  div.innerHTML = `
+    <div class="career-item-head">
+      <span class="career-item-num">경력 ${careerCount}</span>
+      <button class="career-remove" onclick="removeCareer(${careerCount})">삭제</button>
+    </div>
+    <div class="field-row">
+      <div class="field"><label class="field-label">근무처명</label><input type="text" placeholder="○○요양원"></div>
+      <div class="field"><label class="field-label">근무 유형</label>
+        <div class="select-wrap"><select><option>선택</option><option>요양원</option><option>재가방문</option><option>병원동행</option><option>요양병원</option><option>공동생활가정</option><option>기타</option></select></div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label class="field-label">근무 시작</label><input type="date"></div>
+      <div class="field"><label class="field-label">근무 종료</label><input type="date"></div>
+    </div>`;
+  list.appendChild(div);
+  document.querySelector('#career1 .career-remove').style.display = 'block';
+}
+function removeCareer(n) {
+  const el = document.getElementById('career' + n);
+  if (el) el.remove();
+  if (document.querySelectorAll('.career-item').length === 1) {
+    document.querySelector('.career-item .career-remove').style.display = 'none';
+  }
+}
+
+// 약관
+function toggleAgree(id) {
+  const cb = document.getElementById(id);
+  cb.classList.toggle('checked');
+  syncAllCheck();
+}
+function toggleAll() {
+  const all = document.getElementById('cb_all');
+  const next = !all.classList.contains('checked');
+  ['cb_all','cb1','cb2','cb3','cb4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (next) el.classList.add('checked');
+    else el.classList.remove('checked');
+  });
+}
+function syncAllCheck() {
+  const reqs = ['cb1','cb2','cb3','cb4'];
+  const allChecked = reqs.every(id => document.getElementById(id).classList.contains('checked'));
+  const cb_all = document.getElementById('cb_all');
+  if (allChecked) cb_all.classList.add('checked');
+  else cb_all.classList.remove('checked');
+}
+
+// 티어 미리보기
+function updateTierPreview() {
+  const selectedChips = document.querySelectorAll('.chip.selected').length;
+  let tier = 'Basic', wage = '12,000원~', exposure = '일반';
+  if (selectedChips >= 14) { tier = 'Pro'; wage = '18,000원~'; exposure = '최우선'; }
+  else if (selectedChips >= 9) { tier = 'Wellness'; wage = '16,000원~'; exposure = '우선'; }
+  else if (selectedChips >= 5) { tier = 'Care+'; wage = '14,000원~'; exposure = '일반+'; }
+  document.getElementById('previewTier').textContent = tier;
+  document.getElementById('previewWage').textContent = wage;
+  document.getElementById('previewExposure').textContent = exposure;
+}
+
+// 스텝 이동
+const STEP_TITLES = ['','기본 정보','자격증·경력','케어 능력','활동 조건','검토·제출'];
+function goStep(n) {
+  // 검토 단계 진입 시 데이터 채우기
+  if (n === 5) fillReview();
+
+  for (let i = 1; i <= 5; i++) {
+    const card = document.getElementById('step' + i);
+    const sl = document.getElementById('sl' + i);
+    if (card) card.classList.toggle('active', i === n);
+    if (sl) {
+      sl.classList.remove('active','done');
+      if (i === n) sl.classList.add('active');
+      else if (i < n) sl.classList.add('done');
+    }
+  }
+  document.getElementById('progressBar').style.width = (n * 20) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function fillReview() {
+  const get = id => document.getElementById(id)?.value || '—';
+  document.getElementById('rv_name').textContent = get('f_name') || '—';
+  document.getElementById('rv_phone').textContent = get('f_phone') || '—';
+  const gender = document.querySelector('[onclick*="gender"].selected');
+  document.getElementById('rv_gender').textContent = gender ? gender.textContent : '—';
+  const r1text = document.getElementById('f_region1').options[document.getElementById('f_region1').selectedIndex]?.text || '';
+  const r2text = document.getElementById('f_region2').options[document.getElementById('f_region2').selectedIndex]?.text || '';
+  document.getElementById('rv_region').textContent = [r1text, r2text].filter(x => x && x !== '시·도 선택' && x !== '구·군 선택').join(' ') || '—';
+  const intro = get('f_intro');
+  document.getElementById('rv_intro').textContent = intro.length > 80 ? intro.slice(0,80) + '…' : intro;
+  document.getElementById('rv_licnum').textContent = get('f_licnum') || '—';
+  document.getElementById('rv_licyear').textContent = get('f_licyear') ? get('f_licyear') + '년' : '—';
+  const wage = get('f_wage');
+  document.getElementById('rv_wage').textContent = wage ? Number(wage).toLocaleString() + '원/시간' : '—';
+  document.getElementById('rv_tier').textContent = document.getElementById('previewTier').textContent;
+}
+
+function submitForm() {
+  const required = ['cb1','cb2','cb3'];
+  const missing = required.some(id => !document.getElementById(id).classList.contains('checked'));
+  if (missing) {
+    alert('필수 약관에 동의해주세요.');
+    return;
+  }
+  document.getElementById('mainArea').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('completeWrap').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
