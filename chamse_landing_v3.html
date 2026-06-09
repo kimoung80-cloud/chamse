@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>참새 — 요양보호사 매칭 플랫폼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky: #4ab8e8;
+  --sky-dark: #1a9fd4;
+  --sky-light: #eaf6fd;
+  --sky-pale: #f5fbff;
+  --sky-border: #c2e6f7;
+  --white: #ffffff;
+  --gray-50: #f8f9fa;
+  --gray-100: #f1f3f5;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --sans: 'Noto Sans KR', sans-serif;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--white);
+  color: var(--gray-900);
+  line-height: 1.6;
+  overflow-x: hidden;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+}
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  height: 60px;
+  display: flex; align-items: center;
+  padding: 0 6%;
+  justify-content: space-between;
+}
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.logo-mark {
+  width: 30px; height: 30px; background: var(--sky);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 14px; height: 14px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.logo-text { font-size: 19px; font-weight: 700; color: var(--gray-900); letter-spacing: -.03em; }
+.nav-r { display: flex; align-items: center; gap: 8px; }
+.nav-login {
+  font-size: 14px; color: var(--gray-600);
+  text-decoration: none; padding: 6px 12px;
+  border-radius: 8px; font-weight: 500;
+  transition: background .15s;
+}
+.nav-login:hover { background: var(--gray-100); }
+.nav-btn {
+  font-size: 14px; font-weight: 600;
+  background: var(--sky); color: white;
+  border: none; border-radius: 8px;
+  padding: 7px 16px; cursor: pointer;
+  transition: background .15s;
+}
+.nav-btn:hover { background: var(--sky-dark); }
+.hero {
+  background: var(--sky-pale);
+  padding: 72px 6% 64px;
+  text-align: center;
+  border-bottom: 1px solid var(--sky-border);
+}
+.hero-label {
+  display: inline-block;
+  font-size: 13px; font-weight: 600;
+  color: var(--sky-dark);
+  background: var(--sky-light);
+  border: 1px solid var(--sky-border);
+  border-radius: 20px;
+  padding: 4px 14px;
+  margin-bottom: 20px;
+  letter-spacing: .02em;
+}
+.hero h1 {
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.35;
+  letter-spacing: -.03em;
+  margin-bottom: 14px;
+}
+.hero h1 span { color: var(--sky-dark); }
+.hero p {
+  font-size: 16px;
+  color: var(--gray-600);
+  margin-bottom: 36px;
+  font-weight: 400;
+}
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--sky); color: white;
+  font-size: 16px; font-weight: 600;
+  padding: 14px 28px; border-radius: var(--radius);
+  text-decoration: none; border: none; cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+.btn-primary:hover { background: var(--sky-dark); transform: translateY(-1px); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: white; color: var(--sky-dark);
+  font-size: 16px; font-weight: 600;
+  padding: 14px 28px; border-radius: var(--radius);
+  text-decoration: none; border: 2px solid var(--sky-border); cursor: pointer;
+  transition: border-color .15s, background .15s, transform .1s;
+}
+.btn-secondary:hover { border-color: var(--sky); background: var(--sky-light); transform: translateY(-1px); }
+.section { padding: 60px 6%; }
+.section-title { font-size: 22px; font-weight: 700; color: var(--gray-900); letter-spacing: -.03em; margin-bottom: 24px; }
+.region-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.tab {
+  font-size: 14px; font-weight: 500;
+  padding: 7px 16px; border-radius: 20px;
+  border: 1px solid var(--gray-300);
+  background: white; color: var(--gray-600);
+  cursor: pointer; transition: all .15s;
+}
+.tab.active, .tab:hover { background: var(--sky); color: white; border-color: var(--sky); }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: box-shadow .2s, transform .2s;
+  cursor: pointer;
+}
+.card:hover { box-shadow: 0 6px 24px rgba(74,184,232,.13); transform: translateY(-2px); }
+.card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--sky-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+  border: 2px solid var(--sky-border);
+  color: var(--sky-dark); font-weight: 700;
+}
+.card-name { font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; }
+.card-meta { font-size: 13px; color: var(--gray-600); }
+.tier-badge {
+  display: inline-block;
+  font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 12px;
+  margin-left: 6px; letter-spacing: .02em;
+}
+.tier-basic { background: #e9ecef; color: #495057; }
+.tier-careplus { background: #d0f0fd; color: #0077aa; }
+.tier-wellness { background: #d4edda; color: #155724; }
+.tier-pro { background: #fff3cd; color: #856404; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tag {
+  font-size: 12px; font-weight: 500;
+  color: var(--sky-dark);
+  background: var(--sky-light);
+  border: 1px solid var(--sky-border);
+  padding: 3px 10px; border-radius: 20px;
+}
+.card-rate { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 12px; }
+.card-rate span { font-size: 13px; font-weight: 400; color: var(--gray-600); }
+.card-review {
+  background: var(--gray-50);
+  border-left: 3px solid var(--sky);
+  padding: 10px 12px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 14px;
+}
+.review-stars { color: #f5a623; font-size: 13px; margin-bottom: 4px; }
+.review-text { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+.review-author { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+.card-btn {
+  width: 100%; padding: 10px;
+  background: var(--sky); color: white;
+  border: none; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: background .15s;
+  font-family: var(--sans);
+}
+.card-btn:hover { background: var(--sky-dark); }
+footer {
+  background: var(--gray-900);
+  color: var(--gray-500);
+  padding: 36px 6%;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.footer-inner { max-width: 960px; margin: 0 auto; }
+.footer-logo { font-size: 16px; font-weight: 700; color: white; margin-bottom: 8px; }
+.footer-links { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.footer-links a { color: var(--gray-500); text-decoration: none; }
+.footer-links a:hover { color: white; }
+@media (max-width: 960px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .hero { padding: 48px 5% 44px; }
+  .hero h1 { font-size: 24px; }
+  .section { padding: 44px 5%; }
+  .card-grid { grid-template-columns: 1fr; }
+  .hero-btns { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-secondary { width: 100%; max-width: 320px; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="chamse_landing_v3.html">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/></svg>
+    </div>
+    <span class="logo-text">참새</span>
+  </a>
+  <div class="nav-r">
+    <a class="nav-login" href="#">로그인</a>
+    <button class="nav-btn" onclick="location.href='chamse_caregiver_register.html'">요양보호사 등록</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-label">요양보호사 매칭 플랫폼</div>
+  <h1>당신의 가족에게<br><span>꼭 맞는 요양보호사</span>를 만나보세요</h1>
+  <p>성향, 생활 방식, 지역까지 — 세심하게 맞춰드립니다</p>
+  <div class="hero-btns">
+    <a class="btn-primary" href="chamse_register.html">어르신 등록하기</a>
+    <a class="btn-secondary" href="chamse_caregiver_register.html">요양보호사 등록하기</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">지금 활동 중인 요양보호사</div>
+  <div class="region-tabs">
+    <button class="tab active" onclick="filterRegion(this,'all')">전체</button>
+    <button class="tab" onclick="filterRegion(this,'대구')">대구</button>
+    <button class="tab" onclick="filterRegion(this,'서울')">서울</button>
+    <button class="tab" onclick="filterRegion(this,'부산')">부산</button>
+    <button class="tab" onclick="filterRegion(this,'경기')">경기</button>
+    <button class="tab" onclick="filterRegion(this,'인천')">인천</button>
+    <button class="tab" onclick="filterRegion(this,'광주')">광주</button>
+    <button class="tab" onclick="filterRegion(this,'대전')">대전</button>
+    <button class="tab" onclick="filterRegion(this,'울산')">울산</button>
+    <button class="tab" onclick="filterRegion(this,'경북')">경북</button>
+    <button class="tab" onclick="filterRegion(this,'경남')">경남</button>
+    <button class="tab" onclick="filterRegion(this,'충북')">충북</button>
+    <button class="tab" onclick="filterRegion(this,'충남')">충남</button>
+    <button class="tab" onclick="filterRegion(this,'전북')">전북</button>
+    <button class="tab" onclick="filterRegion(this,'전남')">전남</button>
+    <button class="tab" onclick="filterRegion(this,'강원')">강원</button>
+    <button class="tab" onclick="filterRegion(this,'제주')">제주</button>
+  </div>
+  <div class="card-grid" id="cardGrid"></div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">참새</div>
+    <div class="footer-links">
+      <a href="#">이용약관</a>
+      <a href="#">개인정보처리방침</a>
+      <a href="#">공급자 등록</a>
+      <a href="#">고객센터</a>
+    </div>
+    <div>참새 케어 | 사업자등록번호 000-00-00000 | 대표: 홍길동</div>
+    <div>대구광역시 수성구 | cs@chamse.kr</div>
+  </div>
+</footer>
+
+<script>
+const caregivers = [
+  { name:"김미선", age:48, region:"대구", tier:"pro", tierLabel:"Pro", experience:"경력 11년", tags:["치매케어","재활보조","반려동물가능"], rate:"18,000원", rateUnit:"/ 시간", review:{ stars:5, text:"어머니 성격을 금세 파악하시고 편안하게 대해주셔서 정말 감사했어요. 세심함이 남다르세요.", author:"보호자 이**" }},
+  { name:"박정희", age:55, region:"서울", tier:"wellness", tierLabel:"Wellness", experience:"경력 8년", tags:["인지활동","종교(기독교)","여성선호"], rate:"16,000원", rateUnit:"/ 시간", review:{ stars:5, text:"같은 신앙을 가지고 계셔서 어르신이 정서적으로 훨씬 안정되셨어요. 추천합니다.", author:"보호자 최**" }},
+  { name:"이순자", age:51, region:"부산", tier:"careplus", tierLabel:"Care+", experience:"경력 6년", tags:["식사보조","목욕보조","아파트거주"], rate:"14,500원", rateUnit:"/ 시간", review:{ stars:4, text:"꼼꼼하게 케어해주시고 가족처럼 대해주셔서 어르신이 많이 좋아하세요.", author:"보호자 김**" }},
+  { name:"최은영", age:44, region:"경기", tier:"pro", tierLabel:"Pro", experience:"경력 14년", tags:["병원동행","뇌졸중후유증","남성가능"], rate:"19,000원", rateUnit:"/ 시간", review:{ stars:5, text:"병원 동행을 여러 번 해주셨는데 매번 꼼꼼히 챙겨주시고 의료진 소통도 잘 해주셨어요.", author:"보호자 박**" }},
+  { name:"윤혜진", age:46, region:"대구", tier:"wellness", tierLabel:"Wellness", experience:"경력 7년", tags:["낙상예방","운동지원","단독주택"], rate:"15,500원", rateUnit:"/ 시간", review:{ stars:5, text:"운동 루틴을 함께 만들어주셔서 아버지 체력이 눈에 띄게 좋아졌어요. 감사합니다.", author:"보호자 윤**" }},
+  { name:"정수연", age:39, region:"인천", tier:"basic", tierLabel:"Basic", experience:"경력 2년", tags:["말벗","외출동행","반려동물가능"], rate:"12,000원", rateUnit:"/ 시간", review:{ stars:4, text:"밝고 따뜻한 분이세요. 어르신이 대화 상대가 생겨서 활기가 생겼다고 하셨어요.", author:"보호자 정**" }},
+  { name:"한지영", age:52, region:"대전", tier:"careplus", tierLabel:"Care+", experience:"경력 9년", tags:["식사보조","투약관리","종교(불교)"], rate:"14,000원", rateUnit:"/ 시간", review:{ stars:5, text:"꼼꼼하게 투약 챙겨주시고 어르신과 대화도 잘 통하셔서 매우 만족스럽습니다.", author:"보호자 한**" }},
+  { name:"오미경", age:47, region:"울산", tier:"wellness", tierLabel:"Wellness", experience:"경력 10년", tags:["재활보조","낙상예방","남성가능"], rate:"16,500원", rateUnit:"/ 시간", review:{ stars:5, text:"재활 운동을 꾸준히 도와주신 덕분에 아버지가 혼자 걷는 시간이 늘었어요.", author:"보호자 오**" }},
+  { name:"강미란", age:43, region:"경북", tier:"basic", tierLabel:"Basic", experience:"경력 3년", tags:["말벗","외출동행","단독주택"], rate:"12,500원", rateUnit:"/ 시간", review:{ stars:4, text:"어르신이 동네 산책을 좋아하시는데 매번 함께 다녀오셔서 감사해요.", author:"보호자 강**" }},
+  { name:"임수진", age:50, region:"경남", tier:"pro", tierLabel:"Pro", experience:"경력 13년", tags:["치매케어","인지훈련","야간가능"], rate:"18,500원", rateUnit:"/ 시간", review:{ stars:5, text:"치매 증상 관리에 정말 탁월하세요. 어머니 상태가 눈에 띄게 안정됐습니다.", author:"보호자 임**" }},
+  { name:"신은주", age:45, region:"충북", tier:"careplus", tierLabel:"Care+", experience:"경력 7년", tags:["목욕보조","욕창예방","아파트거주"], rate:"14,500원", rateUnit:"/ 시간", review:{ stars:4, text:"위생 케어를 꼼꼼히 챙겨주셔서 어르신 피부 상태가 좋아졌어요.", author:"보호자 신**" }},
+  { name:"문현숙", age:54, region:"충남", tier:"wellness", tierLabel:"Wellness", experience:"경력 11년", tags:["가사보조","식사준비","반려동물가능"], rate:"15,000원", rateUnit:"/ 시간", review:{ stars:5, text:"집안일까지 도와주셔서 어르신이 훨씬 편하게 지내고 계세요. 정말 감사합니다.", author:"보호자 문**" }},
+  { name:"배선희", age:41, region:"전북", tier:"basic", tierLabel:"Basic", experience:"경력 2년", tags:["말벗","병원동행","여성선호"], rate:"12,000원", rateUnit:"/ 시간", review:{ stars:4, text:"병원 다닐 때마다 친절하게 동행해주셔서 가족들이 한결 마음이 놓입니다.", author:"보호자 배**" }},
+  { name:"조영희", age:56, region:"전남", tier:"pro", tierLabel:"Pro", experience:"경력 15년", tags:["호스피스","중증케어","종교(기독교)"], rate:"19,500원", rateUnit:"/ 시간", review:{ stars:5, text:"힘든 시기에 어르신과 가족 모두를 따뜻하게 감싸주셨어요. 정말 감사드립니다.", author:"보호자 조**" }},
+  { name:"유미화", age:38, region:"강원", tier:"careplus", tierLabel:"Care+", experience:"경력 5년", tags:["인지활동","산책동행","반려동물가능"], rate:"13,500원", rateUnit:"/ 시간", review:{ stars:4, text:"활기차고 긍정적인 분이셔서 어르신 기분이 항상 밝아지세요.", author:"보호자 유**" }},
+  { name:"고은숙", age:49, region:"제주", tier:"wellness", tierLabel:"Wellness", experience:"경력 8년", tags:["식사보조","외출동행","단독주택"], rate:"15,500원", rateUnit:"/ 시간", review:{ stars:5, text:"제주 특유의 따뜻한 정으로 어르신을 돌봐주세요. 가족 같은 분이에요.", author:"보호자 고**" }},
+];
+let currentRegion = 'all';
+function tierClass(t){ return {basic:'tier-basic',careplus:'tier-careplus',wellness:'tier-wellness',pro:'tier-pro'}[t]||'tier-basic'; }
+function stars(n){ return Array.from({length:5},(_,i)=>i<n?'★':'☆').join(''); }
+function renderCards(){
+  const grid = document.getElementById('cardGrid');
+  const list = currentRegion==='all' ? caregivers : caregivers.filter(c=>c.region===currentRegion);
+  if(!list.length){ grid.innerHTML='<p style="color:var(--gray-500);font-size:15px;padding:20px 0;">해당 지역의 요양보호사 정보를 준비 중입니다.</p>'; return; }
+  grid.innerHTML = list.map(c=>`
+    <div class="card">
+      <div class="card-top">
+        <div class="avatar">${c.name[0]}</div>
+        <div>
+          <div class="card-name">${c.name[0]}** <span class="tier-badge ${tierClass(c.tier)}">${c.tierLabel}</span></div>
+          <div class="card-meta">${c.region} · ${c.experience} · ${c.age}세</div>
+        </div>
+      </div>
+      <div class="card-tags">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="card-rate">${c.rate} <span>${c.rateUnit}</span></div>
+      <div class="card-review">
+        <div class="review-stars">${stars(c.review.stars)}</div>
+        <div class="review-text">"${c.review.text}"</div>
+        <div class="review-author">— ${c.review.author}</div>
+      </div>
+      <button class="card-btn">매칭 신청하기</button>
+    </div>`).join('');
+}
+function filterRegion(el,region){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  currentRegion=region;
+  renderCards();
+}
+renderCards();
+</script>
+</body>
+</html>
